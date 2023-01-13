@@ -4,7 +4,7 @@ let cors = require('cors');
 let mongo = require('mongodb');
 let MongoClient = mongo.MongoClient;
 let bodyParser = require('body-parser');
-let mongoUrl = "mongodb+srv://syed:syed@cluster0.qw2hfsi.mongodb.net/?retryWrites=true&w=majority";
+let mongoUrl = "mongodb+srv://syed:syed@cluster0.qw2hfsi.mongodb.net/project?retryWrites=true&w=majority";
 let db;
 
 
@@ -96,7 +96,7 @@ app.get('/amazon-anime',(req,res)=>{
 })
 
 //port
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 
 
