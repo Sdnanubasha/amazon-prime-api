@@ -1,7 +1,9 @@
 let express = require("express");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
-require("./config");
+//require("./config");
+let mongo = require('mongodb');
+let MongoClient = mongo.MongoClient;
 let app = express();
 let cors = require("cors");
 let bodyParser = require("body-parser");
@@ -130,8 +132,15 @@ app.get("/amazon-anime", (req, res) => {
 
 //port
 const PORT = process.env.PORT || 8000;
-
+const mongoUrl = process.env.mongoUrl || 'mongodb+srv://syed:syed@cluster0.qw2hfsi.mongodb.net/project?retryWrites=true&w=majority'
 // connect with mongodb
-app.listen(PORT, () => {
-  console.log(`Server is running on port http://localhost:${PORT}`);
-});
+MongoClient.connect(mongoUrl,{useNewUrlParser:true},(err,dc) => {
+  if(err) console.log('Error while connecting');
+  db = dc.db('project');
+  app.listen(PORT,() => {
+      console.log(`Server is running on port ${PORT}`)
+  })
+})
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port http://localhost:${PORT}`);
+// });
