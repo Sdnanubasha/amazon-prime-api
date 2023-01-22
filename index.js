@@ -1,7 +1,7 @@
 let express = require("express");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
-//require("./config");
+require("./config");
 let mongo = require('mongodb');
 let MongoClient = mongo.MongoClient;
 let app = express();
@@ -18,14 +18,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //Routes
 app.post('/register', async (req,res)=>{
+  try {
     let user =new User(req.body);
     let result = await user.save();
     result = result.toObject();
     delete result.password;
     res.send(result);
     console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
 })
 app.post('/login', async (req,res)=>{
+  try {
     if(req.body.password && req.body.email)
     {
         let user = await User.findOne(req.body).select('-password');
@@ -39,6 +44,9 @@ app.post('/login', async (req,res)=>{
     else{
         res.send({messege:"credentials are not match !!!"});
     }
+  } catch (error) {
+    console.log(error);
+  }
 
 })
 
@@ -132,7 +140,7 @@ app.get("/amazon-anime", (req, res) => {
 
 //port
 const PORT = process.env.PORT || 8000;
-const mongoUrl = process.env.mongoUrl || 'mongodb+srv://syed:syed@cluster0.qw2hfsi.mongodb.net/project?retryWrites=true&w=majority'
+const mongoUrl = process.env.MONGODB_URI || 'mongodb+srv://syed:syed@cluster0.qw2hfsi.mongodb.net/project?retryWrites=true&w=majority';
 // connect with mongodb
 MongoClient.connect(mongoUrl,{useNewUrlParser:true},(err,dc) => {
   if(err) console.log('Error while connecting');
