@@ -7,7 +7,30 @@ let MongoClient = mongo.MongoClient;
 let app = express();
 let cors = require("cors");
 let bodyParser = require("body-parser");
-let User = require("./User");
+let RegisterRoute = require ('./routes/Register');
+let LoginRoute = require('./routes/Login');
+let AmazonPrimeRoute = require('./routes/Amazon-prime');
+let AmazonOriginalRoute = require('./routes/Amzon-originals');
+let AmazonMoviesRoute = require('./routes/Amazon-movies');
+let AmazonTvRoute = require('./routes/Amazon-tv');
+let AmazonKidsRoute = require('./routes/Amazon-kids');
+let AmazonAnimesRoute = require('./routes/Amazon-anime');
+
+let MystuffOriginalsRoute = require('./Mystuff/mystuff-originals');
+let GetMystuffOriginalsRoute = require('./GetMystuff/get-originals');
+
+let MystuffTvRoute = require('./Mystuff/mystuff-tv');
+let GetMystuffTvRoute = require('./GetMystuff/get-tv');
+
+let MystuffMoviesRoute = require('./Mystuff/mystuff-movies');
+let GetMystuffMoviesRoute = require('./GetMystuff/get-movies');
+
+let MystuffKidsRoute = require('./Mystuff/mystuff-kids');
+let GetMystuffKidsRoute = require('./GetMystuff/get-kids');
+
+let MystuffAnimesRoute = require('./Mystuff/mystuff-anime');
+let GetMystuffAnimesRoute = require('./GetMystuff/get-anime');
+
 let db;
 
 //middle wares
@@ -17,126 +40,37 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //Routes
-app.post('/register', async (req,res)=>{
-  try {
-    let user =new User(req.body);
-    let result = await user.save();
-    result = result.toObject();
-    delete result.password;
-    res.send(result);
-    console.log(result);
-  } catch (error) {
-    console.log(error);
-  }
-})
-app.post('/login', async (req,res)=>{
-  try {
-    if(req.body.password && req.body.email)
-    {
-        let user = await User.findOne(req.body).select('-password');
-        if(user){
-            res.send(user);
-            console.log(user);
-        }else{
-            res.send({messege:"credentials are not match !!!"});
-        }
-    }
-    else{
-        res.send({messege:"credentials are not match !!!"});
-    }
-  } catch (error) {
-    console.log(error);
-  }
+app.post('/register',RegisterRoute.Register);
 
-})
+app.post('/login',LoginRoute.Login);
 
-app.get("/amazon-prime", (req, res) => {
-  const prime_id = Number(req.query.id);
-  let query = {};
-  if (prime_id) {
-    query.category_id = prime_id;
-  }
-  db.collection("amazon_prime")
-    .find(query)
-    .toArray((err, result) => {
-      if (err) throw err;
-      res.send(result);
-    });
-});
-//amazon_original/////////////////////////////////////////////////////////////////
-app.get("/amazon-originals", (req, res) => {
-  const originals_id = Number(req.query.id);
-  let query = {};
-  if (originals_id) {
-    query.a_o_id = originals_id;
-  }
-  db.collection("amazon_originals")
-    .find(query)
-    .toArray((err, result) => {
-      if (err) throw err;
-      res.send(result);
-    });
-});
+app.get("/amazon-prime",AmazonPrimeRoute.AmazonPrime);
 
-//amazon movies//////////////////////////////////////////////////////////////////
-app.get("/amazon-movies", (req, res) => {
-  const movies_id = Number(req.query.id);
-  let query = {};
-  if (movies_id) {
-    query.m_id = movies_id;
-  }
-  db.collection("movies")
-    .find(query)
-    .toArray((err, result) => {
-      if (err) throw err;
-      res.send(result);
-    });
-});
+app.get("/amazon-originals",AmazonOriginalRoute.Amazonoriginals);
 
-//amazon tv/////////////////////////////////////////////////////////////////////
-app.get("/amazon-tv", (req, res) => {
-  const tv_id = Number(req.query.id);
-  let query = {};
-  if (tv_id) {
-    query.t_id = tv_id;
-  }
-  db.collection("tv")
-    .find(query)
-    .toArray((err, result) => {
-      if (err) throw err;
-      res.send(result);
-    });
-});
+app.get("/amazon-movies",AmazonMoviesRoute.AmazonMovies);
 
-//amazon kids///////////////////////////////////////////////////////////////////
-app.get("/amazon-kids", (req, res) => {
-  const kids_id = Number(req.query.id);
-  let query = {};
-  if (kids_id) {
-    query.k_id = kids_id;
-  }
-  db.collection("kids")
-    .find(query)
-    .toArray((err, result) => {
-      if (err) throw err;
-      res.send(result);
-    });
-});
+app.get("/amazon-tv",AmazonTvRoute.AmazonTv);
 
-//amazon anime/////////////////////////////////////////////////////////////////
-app.get("/amazon-anime", (req, res) => {
-  const anime_id = Number(req.query.id);
-  let query = {};
-  if (anime_id) {
-    query.a_id = anime_id;
-  }
-  db.collection("anime")
-    .find(query)
-    .toArray((err, result) => {
-      if (err) throw err;
-      res.send(result);
-    });
-});
+app.get("/amazon-kids",AmazonKidsRoute.AmazonKids);
+
+app.get("/amazon-anime",AmazonAnimesRoute.AmazonAnimes);
+
+app.post("/mystuff-originals",MystuffOriginalsRoute.MystuffOriginals);
+app.get("/mystuff-originals",GetMystuffOriginalsRoute.GetMystuffOriginals);
+
+app.post("/mystuff-tvs",MystuffTvRoute.MystuffTv);
+app.get("/mystuff-tvs",GetMystuffTvRoute.GetMystuffTv);
+
+app.post("/mystuff-movies",MystuffMoviesRoute.MystuffMovies);
+app.get("/mystuff-movies",GetMystuffMoviesRoute.GetMystuffMovies);
+
+app.post("/mystuff-kids",MystuffKidsRoute.MystuffKids);
+app.get("/mystuff-kids",GetMystuffKidsRoute.GetMystuffKids);
+
+app.post("/mystuff-animes",MystuffAnimesRoute.MystuffAnimes);
+app.get("/mystuff-animes",GetMystuffAnimesRoute.GetMystuffAnimes);
+
 
 //port
 const PORT = process.env.PORT || 8000;
