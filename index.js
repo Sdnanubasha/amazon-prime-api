@@ -58,18 +58,23 @@ app.get("/amazon-anime",AmazonAnimesRoute.AmazonAnimes);
 
 app.post("/mystuff-originals",MystuffOriginalsRoute.MystuffOriginals);
 app.get("/mystuff-originals",GetMystuffOriginalsRoute.GetMystuffOriginals);
+app.delete("/mystuff-originals/:id",GetMystuffOriginalsRoute.DeleteOriginal);
 
 app.post("/mystuff-tvs",MystuffTvRoute.MystuffTv);
 app.get("/mystuff-tvs",GetMystuffTvRoute.GetMystuffTv);
+app.delete("/mystuff-tvs/:id",GetMystuffTvRoute.DeleteTv);
 
 app.post("/mystuff-movies",MystuffMoviesRoute.MystuffMovies);
 app.get("/mystuff-movies",GetMystuffMoviesRoute.GetMystuffMovies);
+app.delete("/mystuff-movies/:id",GetMystuffMoviesRoute.DeleteMovie);
 
 app.post("/mystuff-kids",MystuffKidsRoute.MystuffKids);
 app.get("/mystuff-kids",GetMystuffKidsRoute.GetMystuffKids);
+app.delete("/mystuff-kids/:id",GetMystuffKidsRoute.DeleteKid);
 
 app.post("/mystuff-animes",MystuffAnimesRoute.MystuffAnimes);
 app.get("/mystuff-animes",GetMystuffAnimesRoute.GetMystuffAnimes);
+app.delete("/mystuff-animes/:id",GetMystuffAnimesRoute.DeleteAnime);
 
 
 //port
