@@ -13,7 +13,7 @@ const AmazonAnimes = (req, res) => {
     const prime_id = Number(req.query.id);
     let query = {};
     if (prime_id) {
-      query.m_id = prime_id;
+      query.a_id = prime_id;
     }
     db.collection("anime")
       .find(query)
